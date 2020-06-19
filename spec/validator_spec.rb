@@ -48,6 +48,16 @@ RSpec.describe Codebreaker::Validator do
     end
   end
 
+  context '#validate_non_negative_integer' do
+    it 'can validate non negative integer' do
+      expect { validator.validate_non_negative_integer(0) }.not_to raise_error
+    end
+
+    it 'can fail validation and raise CodebreakerArgumentError' do
+      expect { validator.validate_non_negative_integer(-1) }.to raise_error(Codebreaker::CodebreakerArgumentError)
+    end
+  end
+
   context '#raise_error' do
     it 'can raise error with message' do
       expect { validator.raise_error(StandardError, 'Error message') }.to raise_error(StandardError)

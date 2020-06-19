@@ -22,6 +22,11 @@ module Codebreaker
       raise_error(CodebreakerArgumentError, message) unless number.positive?
     end
 
+    def validate_non_negative_integer(number)
+      message = 'Integer was negative'
+      raise_error(CodebreakerArgumentError, message) if number.negative?
+    end
+
     def raise_error(error_class, message)
       raise error_class, message
     end
