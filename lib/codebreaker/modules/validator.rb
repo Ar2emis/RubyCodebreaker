@@ -27,6 +27,16 @@ module Codebreaker
       raise_error(CodebreakerArgumentError, message) if number.negative?
     end
 
+    def validate_string_length(string:, min_length:, max_length: nil)
+      if max_length.nil?
+        message = "String length was less than #{min_length}"
+        raise_error(CodebreakerArgumentError, message) if string.length < min_length
+      else
+        message = "String length was not in range: #{min_length}-#{max_length}"
+        raise_error(CodebreakerArgumentError, message) if string.length < min_length || string.length > max_length
+      end
+    end
+
     def raise_error(error_class, message)
       raise error_class, message
     end

@@ -5,6 +5,7 @@ require 'codebreaker/errors/codebreaker_argument_error'
 require 'codebreaker/modules/validator'
 require 'codebreaker/code_generator'
 require 'codebreaker/difficulty'
+require 'codebreaker/user'
 
 module Codebreaker
 end

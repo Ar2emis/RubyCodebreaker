@@ -9,7 +9,7 @@ RSpec.describe Codebreaker::Validator do
       expect { validator.validate_class(String, String) }.not_to raise_error
     end
 
-    it 'can fail validation and raise CodebreakerArgumentError' do
+    it 'can fail validation' do
       expect { validator.validate_class(String, Integer) }.to raise_error(Codebreaker::CodebreakerArgumentError)
     end
   end
@@ -23,7 +23,7 @@ RSpec.describe Codebreaker::Validator do
       expect { validator.validate_class_or_nil(String, nil.class) }.not_to raise_error
     end
 
-    it 'can fail validation and raise CodebreakerArgumentError' do
+    it 'can fail validation' do
       expect { validator.validate_class_or_nil(String, Integer) }.to raise_error(Codebreaker::CodebreakerArgumentError)
     end
   end
@@ -33,7 +33,7 @@ RSpec.describe Codebreaker::Validator do
       expect { validator.validate_non_empty_string('abc') }.not_to raise_error
     end
 
-    it 'can fail validation and raise CodebreakerArgumentError' do
+    it 'can fail validation' do
       expect { validator.validate_non_empty_string('') }.to raise_error(Codebreaker::CodebreakerArgumentError)
     end
   end
@@ -43,7 +43,7 @@ RSpec.describe Codebreaker::Validator do
       expect { validator.validate_positive_integer(1) }.not_to raise_error
     end
 
-    it 'can fail validation and raise CodebreakerArgumentError' do
+    it 'can fail validation' do
       expect { validator.validate_positive_integer(0) }.to raise_error(Codebreaker::CodebreakerArgumentError)
     end
   end
@@ -53,8 +53,36 @@ RSpec.describe Codebreaker::Validator do
       expect { validator.validate_non_negative_integer(0) }.not_to raise_error
     end
 
-    it 'can fail validation and raise CodebreakerArgumentError' do
+    it 'can fail validation' do
       expect { validator.validate_non_negative_integer(-1) }.to raise_error(Codebreaker::CodebreakerArgumentError)
+    end
+  end
+
+  context '#validate_string_length' do
+    it 'can validate string minimal length' do
+      expect { validator.validate_string_length(string: 'aaa', min_length: 2) }.not_to raise_error
+    end
+
+    it 'can validate string minimal and maximal length' do
+      expect { validator.validate_string_length(string: 'aaa', min_length: 1, max_length: 3) }.not_to raise_error
+    end
+
+    it 'can fail minimal length validation' do
+      expect do
+        validator.validate_string_length(string: 'aaa', min_length: 5)
+      end.to raise_error(Codebreaker::CodebreakerArgumentError)
+    end
+
+    it 'can fail minimal and maximal length validation by minimal length' do
+      expect do
+        validator.validate_string_length(string: 'aaa', min_length: 5, max_length: 10)
+      end.to raise_error(Codebreaker::CodebreakerArgumentError)
+    end
+
+    it 'can fail minimal and maximal length validation by maximal length' do
+      expect do
+        validator.validate_string_length(string: 'aaaaaaaaaa', min_length: 2, max_length: 3)
+      end.to raise_error(Codebreaker::CodebreakerArgumentError)
     end
   end
 
