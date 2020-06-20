@@ -7,6 +7,7 @@ require 'codebreaker/code_generator'
 require 'codebreaker/difficulty'
 require 'codebreaker/user'
 require 'codebreaker/guess'
+require 'codebreaker/user_statistics'
 
 module Codebreaker
 end
