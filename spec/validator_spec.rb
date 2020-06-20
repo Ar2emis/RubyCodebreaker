@@ -86,6 +86,16 @@ RSpec.describe Codebreaker::Validator do
     end
   end
 
+  context '#validate_only_numeric_string' do
+    it 'can validate only numeric string' do
+      expect { validator.validate_only_numeric_string('1234') }.not_to raise_error
+    end
+
+    it 'can fail validation' do
+      expect { validator.validate_only_numeric_string('a2da.') }.to raise_error(Codebreaker::CodebreakerArgumentError)
+    end
+  end
+
   context '#raise_error' do
     it 'can raise error with message' do
       expect { validator.raise_error(StandardError, 'Error message') }.to raise_error(StandardError)

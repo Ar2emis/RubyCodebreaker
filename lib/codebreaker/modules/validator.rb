@@ -37,6 +37,11 @@ module Codebreaker
       end
     end
 
+    def validate_only_numeric_string(string)
+      message = 'String did not match only numeric regex'
+      raise_error(CodebreakerArgumentError, message) unless /\A\d+\Z/.match?(string)
+    end
+
     def raise_error(error_class, message)
       raise error_class, message
     end
