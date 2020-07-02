@@ -24,7 +24,7 @@ module Codebreaker
     end
 
     def validate_code
-      validate_class(String, @code.class)
+      validate_class(String, @code)
       validate_string_length(string: @code, min_length: 4, max_length: 4)
       validate_only_numeric_string(@code)
     end

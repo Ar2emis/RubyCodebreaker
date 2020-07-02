@@ -1,3 +1,5 @@
+require: rubocop-rspec
+
 AllCops:
   TargetRubyVersion: 2.7
   NewCops: enable
@@ -9,4 +11,5 @@ Style/Documentation:
   Enabled: false
 
 Metrics/BlockLength:
-  ExcludedMethods: ['describe']
+  Exclude:
+    - 'spec/*/*spec.rb'

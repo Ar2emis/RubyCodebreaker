@@ -24,11 +24,11 @@ module Codebreaker
     end
 
     def validate_range
-      validate_class(Range, @range.class)
+      validate_class(Range, @range)
     end
 
     def validate_amount
-      validate_class(Integer, @amount.class)
+      validate_class(Integer, @amount)
       validate_positive_integer(@amount)
     end
   end

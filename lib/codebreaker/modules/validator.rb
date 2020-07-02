@@ -2,48 +2,36 @@
 
 module Codebreaker
   module Validator
-    def validate_class(expected_class, instance_class)
-      message = "Not expected class. Expected #{expected_class} class, but was #{instance_class} class"
-      raise_error(CodebreakerArgumentError, message) unless expected_class == instance_class
+    def validate_class(expected_class, instance)
+      raise UnexpectedClassError unless expected_class == instance.class
     end
 
-    def validate_class_or_nil(expected_class, instance_class)
-      message = "Not expected class. Expected #{expected_class} class or NilClass, but was #{instance_class} class"
-      raise_error(CodebreakerArgumentError, message) unless [expected_class, NilClass].include?(instance_class)
+    def validate_class_or_nil(expected_class, instance)
+      raise UnexpectedClassError unless [expected_class, NilClass].include?(instance.class)
     end
 
     def validate_non_empty_string(string)
-      message = 'String was empty'
-      raise_error(CodebreakerArgumentError, message) if string.empty?
+      raise EmptyStringError if string.empty?
     end
 
     def validate_positive_integer(number)
-      message = 'Integer was not positive'
-      raise_error(CodebreakerArgumentError, message) unless number.positive?
+      raise NonPositiveIntegerError unless number.positive?
     end
 
     def validate_non_negative_integer(number)
-      message = 'Integer was negative'
-      raise_error(CodebreakerArgumentError, message) if number.negative?
+      raise NegativeIntegerError if number.negative?
     end
 
     def validate_string_length(string:, min_length:, max_length: nil)
       if max_length.nil?
-        message = "String length was less than #{min_length}"
-        raise_error(CodebreakerArgumentError, message) if string.length < min_length
-      else
-        message = "String length was not in range: #{min_length}-#{max_length}"
-        raise_error(CodebreakerArgumentError, message) if string.length < min_length || string.length > max_length
+        raise InvalidStringLengthError if string.length < min_length
+      elsif string.length < min_length || string.length > max_length
+        raise InvalidStringLengthError
       end
     end
 
     def validate_only_numeric_string(string)
-      message = 'String did not match only numeric regex'
-      raise_error(CodebreakerArgumentError, message) unless /\A\d+\Z/.match?(string)
-    end
-
-    def raise_error(error_class, message)
-      raise error_class, message
+      raise NonNumericStringError unless /\A\d+\Z/.match?(string)
     end
   end
 end

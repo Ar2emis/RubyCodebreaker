@@ -22,17 +22,17 @@ module Codebreaker
     end
 
     def validate_name
-      validate_class(String, @name.class)
+      validate_class(String, @name)
       validate_non_empty_string(@name)
     end
 
     def validate_attempts
-      validate_class(Integer, @attempts.class)
+      validate_class(Integer, @attempts)
       validate_positive_integer(@attempts)
     end
 
     def validate_hints
-      validate_class(Integer, @hints.class)
+      validate_class(Integer, @hints)
       validate_non_negative_integer(@hints)
     end
   end

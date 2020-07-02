@@ -24,20 +24,20 @@ module Codebreaker
     end
 
     def validate_user
-      validate_class(Codebreaker::User, @user.class)
+      validate_class(Codebreaker::User, @user)
     end
 
     def validate_difficulty
-      validate_class(Codebreaker::Difficulty, @difficulty.class)
+      validate_class(Codebreaker::Difficulty, @difficulty)
     end
 
     def validate_attempts
-      validate_class(Integer, @attempts.class)
+      validate_class(Integer, @attempts)
       validate_positive_integer(@attempts)
     end
 
     def validate_hints
-      validate_class(Integer, @hints.class)
+      validate_class(Integer, @hints)
       validate_non_negative_integer(@hints)
     end
   end
