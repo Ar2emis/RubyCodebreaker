@@ -12,3 +12,6 @@
 
 # gems modules
 /vendor/bundle/
+
+# database
+/db/

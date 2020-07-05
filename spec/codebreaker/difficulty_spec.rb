@@ -1,24 +1,23 @@
 # frozen_string_literal: true
 
 RSpec.describe Codebreaker::Difficulty do
-  let(:name) { 'Easy' }
-  let(:attempts) { 15 }
-  let(:hints) { 2 }
-  let(:invalid_name) { 1 }
-  let(:invalid_attempts) { 0 }
-  let(:invalid_hints) { -1 }
-  let(:expected_errors) do
-    [Codebreaker::UnexpectedClassError,
-     Codebreaker::NonPositiveIntegerError,
-     Codebreaker::NegativeIntegerError]
-  end
+  subject(:difficulty) { described_class.new(name: 'Medium', attempts: 10, hints: 2) }
 
-  it 'can be created by passing name, attempts, hints to it' do
-    expect { described_class.new(name: name, attempts: attempts, hints: hints) }.not_to raise_error
-  end
+  let(:equal_difficulty) { described_class.new(name: 'Normal', attempts: 10, hints: 2) }
+  let(:easy_difficulty) { described_class.new(name: 'Easy', attempts: 15, hints: 3) }
+  let(:hell_difficulty) { described_class.new(name: 'Hell', attempts: 5, hints: 1) }
 
-  it 'can raise error if passed parameters are invalid' do
-    expect { described_class.new(name: invalid_name, attempts: invalid_attempts, hints: invalid_hints) }
-      .to(raise_error { |error| expected_errors.include?(error.class) })
+  describe '#<=>' do
+    it 'is harder when fewer attempts and hints' do
+      expect(difficulty <=> easy_difficulty).to eq 1
+    end
+
+    it 'is easier when more attempts and hints' do
+      expect(difficulty <=> hell_difficulty).to eq(-1)
+    end
+
+    it 'is equal another difficulty when has same amount of attempts and hints' do
+      expect(difficulty <=> equal_difficulty).to eq 0
+    end
   end
 end

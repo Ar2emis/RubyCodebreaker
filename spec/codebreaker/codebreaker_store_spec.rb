@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-RSpec.describe Codebreaker::UserStatisticsStore do
-  let(:directory_path) { 'Codebreaker::UserStatisticsStore::STORAGE_DIRECTORY' }
-  let(:filename) { 'Codebreaker::UserStatisticsStore::STORAGE_FILE' }
+RSpec.describe Codebreaker::CodebreakerStore do
+  let(:directory_path) { 'Codebreaker::CodebreakerStore::STORAGE_DIRECTORY' }
+  let(:filename) { 'Codebreaker::CodebreakerStore::STORAGE_FILE' }
 
   describe 'instance creation' do
     context 'when db initialized' do
@@ -21,7 +21,7 @@ RSpec.describe Codebreaker::UserStatisticsStore do
     end
 
     context 'when db is not initialized' do
-      let(:initialized_directory_path) { 'spec/codebreaker/db' }
+      let(:initialized_directory_path) { 'test_db' }
       let(:initialized_filename) { 'user_statistics.yml' }
 
       before do
@@ -30,6 +30,7 @@ RSpec.describe Codebreaker::UserStatisticsStore do
       end
 
       after do
+        File.delete(File.join(initialized_directory_path, initialized_filename))
         Dir.rmdir(initialized_directory_path)
       end
 
@@ -41,7 +42,7 @@ RSpec.describe Codebreaker::UserStatisticsStore do
   end
 
   describe '#save' do
-    let(:saving_directory_path) { 'spec/codebreaker' }
+    let(:saving_directory_path) { 'test_db' }
     let(:saving_filename) { 'saved_user_statistics.yml' }
     let(:user) { Codebreaker::User.new('John Doe') }
     let(:difficulty) { Codebreaker::Difficulty.new(name: 'Easy', attempts: 10, hints: 5) }
@@ -55,6 +56,7 @@ RSpec.describe Codebreaker::UserStatisticsStore do
 
     after do
       File.delete(File.join(saving_directory_path, saving_filename))
+      Dir.rmdir(saving_directory_path)
     end
 
     it 'can save users statistics' do

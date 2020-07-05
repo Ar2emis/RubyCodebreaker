@@ -13,6 +13,10 @@ module Codebreaker
       validate_data
     end
 
+    def <=>(other)
+      [-attempts, -hints] <=> [-other.attempts, -other.hints]
+    end
+
     private
 
     def validate_data

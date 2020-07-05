@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Codebreaker
-  class UserStatisticsStore
+  class CodebreakerStore
     STORAGE_DIRECTORY = 'db'
-    STORAGE_FILE = 'user_statistics.yml'
+    STORAGE_FILE = 'db.yml'
     attr_accessor :data
 
     def initialize
@@ -19,11 +19,14 @@ module Codebreaker
     private
 
     def db_initialized?
-      Dir.exist?(STORAGE_DIRECTORY)
+      Dir.exist?(STORAGE_DIRECTORY) && File.file?(File.join(STORAGE_DIRECTORY, STORAGE_FILE))
     end
 
     def initialize_db
       Dir.mkdir(STORAGE_DIRECTORY)
+
+      store = YAML::Store.new(File.join(STORAGE_DIRECTORY, STORAGE_FILE))
+      store.transaction { default_data.each { |key, value| store[key] = value } }
 
       default_data
     end
