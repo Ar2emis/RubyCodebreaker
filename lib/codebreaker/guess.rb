@@ -3,6 +3,8 @@
 module Codebreaker
   class Guess
     include Validator
+    include GameConfiguration
+
     attr_reader :code
 
     def initialize(code)
@@ -25,7 +27,7 @@ module Codebreaker
 
     def validate_code
       validate_class(String, @code)
-      validate_string_length(string: @code, min_length: 4, max_length: 4)
+      validate_string_length(string: @code, min_length: CODE_LENGTH, max_length: CODE_LENGTH)
       validate_only_numeric_string(@code)
     end
   end

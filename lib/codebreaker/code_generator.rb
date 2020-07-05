@@ -3,8 +3,9 @@
 module Codebreaker
   class CodeGenerator
     include Validator
+    include GameConfiguration
 
-    def initialize(range: (1..6), amount: 4)
+    def initialize(range: CODE_RANGE, amount: CODE_LENGTH)
       @range = range
       @amount = amount
 
