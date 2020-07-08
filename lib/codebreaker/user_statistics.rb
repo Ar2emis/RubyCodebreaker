@@ -33,7 +33,7 @@ module Codebreaker
 
     def validate_attempts
       validate_class(Integer, @attempts)
-      validate_positive_integer(@attempts)
+      validate_non_negative_integer(@attempts)
     end
 
     def validate_hints

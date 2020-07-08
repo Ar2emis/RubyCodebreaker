@@ -29,7 +29,7 @@ module Codebreaker
     def save_statistic
       raise InappropriateStageError unless stage == END_STAGE
 
-      user_statisic = UserStatistics.new(user: user, difficulty: difficulty, attempts: attempts, hints: hints)
+      user_statisic = create_user_statistic
       @store.data[:user_statistics] << user_statisic
       @store.save
     end
@@ -61,6 +61,12 @@ module Codebreaker
     end
 
     private
+
+    def create_user_statistic
+      UserStatistics.new(user: user, difficulty: difficulty,
+                         attempts: difficulty.attempts - attempts,
+                         hints: difficulty.hints - hints)
+    end
 
     def prepare_game
       @attempts = difficulty.attempts

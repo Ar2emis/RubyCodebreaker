@@ -9,6 +9,13 @@ RSpec.describe Codebreaker::Game do
   let(:game_stage) { :game }
   let(:end_stage) { :end }
 
+  before do
+    store = instance_double(Codebreaker::CodebreakerStore)
+    allow(store).to receive(:data).and_return({ user_statistics: [] })
+    allow(store).to receive(:save)
+    allow(Codebreaker::CodebreakerStore).to receive(:new).and_return(store)
+  end
+
   describe '#restart' do
     it 'changes code' do
       old_code = game.code
@@ -28,21 +35,6 @@ RSpec.describe Codebreaker::Game do
   end
 
   context 'with user statistics' do
-    let(:saving_directory_path) { 'test_db' }
-    let(:saving_filename) { 'saved_user_statistics.yml' }
-    let(:directory_path) { 'Codebreaker::CodebreakerStore::STORAGE_DIRECTORY' }
-    let(:filename) { 'Codebreaker::CodebreakerStore::STORAGE_FILE' }
-
-    before do
-      stub_const(directory_path, saving_directory_path)
-      stub_const(filename, saving_filename)
-    end
-
-    after do
-      File.delete(File.join(saving_directory_path, saving_filename))
-      Dir.rmdir(saving_directory_path)
-    end
-
     describe '#save_statistic' do
       let(:expected_error) { Codebreaker::InappropriateStageError }
 

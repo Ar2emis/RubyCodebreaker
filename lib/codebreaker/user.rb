@@ -3,9 +3,11 @@
 module Codebreaker
   class User
     include Validator
-    include GameConfiguration
 
     attr_reader :name
+
+    USERNAME_MIN_LENGTH = 3
+    USERNAME_MAX_LENGTH = 20
 
     def initialize(name)
       @name = name

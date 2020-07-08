@@ -3,9 +3,11 @@
 module Codebreaker
   class CodeMatcher
     include Validator
-    include GameConfiguration
 
     attr_reader :answer
+
+    STRONG_MATCH_SYMBOL = '+'
+    SOFT_MATCH_SYMBOL = '-'
 
     def initialize(secret_code, guess_code)
       @secret_code = secret_code

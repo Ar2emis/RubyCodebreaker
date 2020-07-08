@@ -3,9 +3,10 @@
 module Codebreaker
   class Guess
     include Validator
-    include GameConfiguration
 
     attr_reader :code
+
+    CODE_LENGTH = 4
 
     def initialize(code)
       @code = code

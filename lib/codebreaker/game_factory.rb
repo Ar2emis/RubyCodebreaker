@@ -3,21 +3,14 @@
 module Codebreaker
   class GameFactory
     include Validator
-    include GameConfiguration
 
     EASY = :easy_difficulty
     MEDIUM = :medium_difficulty
     HELL = :hell_difficulty
 
-    EASY_DIFFICULTY = Difficulty.new(name: EASY_DIFFICULTY_CONFIG[:name],
-                                     attempts: EASY_DIFFICULTY_CONFIG[:attempts],
-                                     hints: EASY_DIFFICULTY_CONFIG[:hints]).freeze
-    MEDIUM_DIFFICULTY = Difficulty.new(name: MEDIUM_DIFFICULTY_CONFIG[:name],
-                                       attempts: MEDIUM_DIFFICULTY_CONFIG[:attempts],
-                                       hints: MEDIUM_DIFFICULTY_CONFIG[:hints]).freeze
-    HELL_DIFFICULTY = Difficulty.new(name: HELL_DIFFICULTY_CONFIG[:name],
-                                     attempts: HELL_DIFFICULTY_CONFIG[:attempts],
-                                     hints: HELL_DIFFICULTY_CONFIG[:hints]).freeze
+    EASY_DIFFICULTY = Difficulty.new(name: 'Easy', attempts: 15, hints: 2).freeze
+    MEDIUM_DIFFICULTY = Difficulty.new(name: 'Medium', attempts: 10, hints: 1).freeze
+    HELL_DIFFICULTY = Difficulty.new(name: 'Hell', attempts: 5, hints: 1).freeze
 
     def create_game(user, difficulty_keyword)
       validate_data(user, difficulty_keyword)
