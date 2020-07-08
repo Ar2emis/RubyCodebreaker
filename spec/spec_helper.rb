@@ -3,7 +3,11 @@
 require 'bundler/setup'
 
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  enable_coverage :branch
+  add_filter 'spec/'
+  minimum_coverage 95
+end
 
 require 'codebreaker'
 
