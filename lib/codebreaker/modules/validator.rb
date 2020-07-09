@@ -3,7 +3,7 @@
 module Codebreaker
   module Validator
     def validate_class(expected_class, instance)
-      raise UnexpectedClassError unless expected_class == instance.class
+      raise UnexpectedClassError unless instance.is_a?(expected_class)
     end
 
     def validate_class_or_nil(expected_class, instance)
