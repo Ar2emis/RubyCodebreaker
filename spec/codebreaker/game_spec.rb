@@ -51,7 +51,7 @@ RSpec.describe Codebreaker::Game do
 
     describe '#user_statistic' do
       it 'returns game statistic' do
-        expect(game.user_statistic).to be_an Array
+        expect(described_class.user_statistic).to be_an Array
       end
     end
   end

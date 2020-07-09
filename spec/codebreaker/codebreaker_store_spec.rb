@@ -62,7 +62,7 @@ RSpec.describe Codebreaker::CodebreakerStore do
     it 'can save users statistics' do
       store = described_class.new
       statistics = Codebreaker::UserStatistics.new(user: user, difficulty: difficulty, attempts: attempts, hints: hints)
-      store.data = { statistics: statistics }
+      store.data[:user_statistics] << statistics
       expect { store.save }.not_to raise_error
     end
   end

@@ -22,8 +22,9 @@ module Codebreaker
       prepare_game
     end
 
-    def user_statistic
-      @store.data[:user_statistics].sort_by { |stat| [stat.difficulty, -stat.attempts, -stat.hints] }
+    def self.user_statistic
+      store = CodebreakerStore.new
+      store.data[:user_statistics].sort_by { |stat| [stat.difficulty, -stat.attempts, -stat.hints] }
     end
 
     def save_statistic
