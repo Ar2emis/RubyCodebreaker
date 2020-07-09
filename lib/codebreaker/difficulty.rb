@@ -14,7 +14,7 @@ module Codebreaker
     end
 
     def <=>(other)
-      [-attempts, -hints] <=> [-other.attempts, -other.hints]
+      [attempts, hints] <=> [other.attempts, other.hints]
     end
 
     private
