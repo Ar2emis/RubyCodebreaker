@@ -9,11 +9,11 @@ RSpec.describe Codebreaker::Difficulty do
 
   describe '#<=>' do
     it 'is harder when fewer attempts and hints' do
-      expect(difficulty <=> easy_difficulty).to eq 1
+      expect(difficulty <=> easy_difficulty).to eq(-1)
     end
 
     it 'is easier when more attempts and hints' do
-      expect(difficulty <=> hell_difficulty).to eq(-1)
+      expect(difficulty <=> hell_difficulty).to eq 1
     end
 
     it 'is equal another difficulty when has same amount of attempts and hints' do
