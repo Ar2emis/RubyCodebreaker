@@ -44,7 +44,7 @@ RSpec.describe Codebreaker::CodebreakerStore do
   describe '#save' do
     let(:saving_directory_path) { 'test_db' }
     let(:saving_filename) { 'saved_user_statistics.yml' }
-    let(:user) { Codebreaker::User.new('John Doe') }
+    let(:user) { Codebreaker::User.new(Faker::Name.first_name) }
     let(:difficulty) { Codebreaker::Difficulty.new(name: 'Easy', attempts: 10, hints: 5) }
     let(:attempts) { 3 }
     let(:hints) { 2 }

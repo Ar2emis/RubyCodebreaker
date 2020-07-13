@@ -4,7 +4,7 @@ RSpec.describe Codebreaker::GameFactory do
   describe '#create_game' do
     subject(:factory) { described_class.new }
 
-    let(:user) { Codebreaker::User.new('John Doe') }
+    let(:user) { Codebreaker::User.new(Faker::Name.first_name) }
 
     before do
       store = instance_double(Codebreaker::CodebreakerStore)

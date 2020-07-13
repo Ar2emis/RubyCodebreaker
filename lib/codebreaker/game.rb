@@ -3,7 +3,7 @@
 module Codebreaker
   class Game
     include Validator
-    attr_reader :difficulty, :user, :attempts, :hints, :code, :stage
+    attr_reader :difficulty, :user, :attempts_amount, :hints_amount, :code, :stage
 
     GAME_STAGE = :game
     END_STAGE = :end
@@ -36,23 +36,23 @@ module Codebreaker
     end
 
     def take_hint
-      raise NoHintsLeftError unless hints.positive?
+      raise NoHintsLeftError unless hints_amount.positive?
       raise InappropriateStageError if stage != GAME_STAGE
 
-      @hints -= 1
-      @hints_code.pop
+      @hints_amount -= 1
+      @hints.pop
     end
 
     def make_turn(guess)
       raise InappropriateStageError if stage != GAME_STAGE
 
-      @attempts -= 1
+      @attempts_amount -= 1
 
       matcher = CodeMatcher.new(code, guess.code)
       match_result = matcher.match_codes
 
       if matcher.codes_match? then final_response(WIN_STATUS, match_result)
-      elsif attempts.positive? then response(PLAY_STATUS, match_result)
+      elsif attempts_amount.positive? then response(PLAY_STATUS, match_result)
       else final_response(LOSE_STATUS, match_result)
       end
     end
@@ -65,15 +65,15 @@ module Codebreaker
 
     def create_user_statistic
       UserStatistics.new(user: user, difficulty: difficulty,
-                         attempts: difficulty.attempts - attempts,
-                         hints: difficulty.hints - hints)
+                         attempts: difficulty.attempts - attempts_amount,
+                         hints: difficulty.hints - hints_amount)
     end
 
     def prepare_game
-      @attempts = difficulty.attempts
-      @hints = difficulty.hints
+      @attempts_amount = difficulty.attempts
+      @hints_amount = difficulty.hints
       @code = CodeGenerator.new.generate
-      @hints_code = code.shuffle
+      @hints = code.sample(hints_amount)
       @stage = GAME_STAGE
     end
 

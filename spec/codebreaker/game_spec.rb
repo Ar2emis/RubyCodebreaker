@@ -4,7 +4,7 @@ RSpec.describe Codebreaker::Game do
   subject(:game) { described_class.new(difficulty, user) }
 
   let(:difficulty) { Codebreaker::Difficulty.new(name: 'Easy', attempts: 10, hints: 2) }
-  let(:user) { Codebreaker::User.new('John Doe') }
+  let(:user) { Codebreaker::User.new(Faker::Name.first_name) }
   let(:stage_variable) { :@stage }
   let(:game_stage) { :game }
   let(:end_stage) { :end }
@@ -25,12 +25,12 @@ RSpec.describe Codebreaker::Game do
 
     it 'restore attempts' do
       game.restart
-      expect(game.attempts).to eq difficulty.attempts
+      expect(game.attempts_amount).to eq difficulty.attempts
     end
 
     it 'restore hints' do
       game.restart
-      expect(game.hints).to eq difficulty.hints
+      expect(game.hints_amount).to eq difficulty.hints
     end
   end
 
@@ -57,7 +57,7 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe '#take_hint' do
-    let(:hints_variable) { :@hints }
+    let(:hints_variable) { :@hints_amount }
     let(:expected_no_hints_error) { Codebreaker::NoHintsLeftError }
     let(:expected_stage_error) { Codebreaker::InappropriateStageError }
 
@@ -84,7 +84,7 @@ RSpec.describe Codebreaker::Game do
       let(:play_status) { described_class::PLAY_STATUS }
       let(:win_status) { described_class::WIN_STATUS }
       let(:lose_status) { described_class::LOSE_STATUS }
-      let(:attempts_variable) { :@attempts }
+      let(:attempts_variable) { :@attempts_amount }
 
       it 'returns playing status and action result when game continues' do
         expect(game.make_turn(guess)[:status]).to eq play_status

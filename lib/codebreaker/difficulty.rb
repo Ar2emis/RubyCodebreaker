@@ -26,18 +26,18 @@ module Codebreaker
     end
 
     def validate_name
-      validate_class(String, @name)
-      validate_non_empty_string(@name)
+      validate_class(String, name)
+      validate_non_empty_string(name)
     end
 
     def validate_attempts
-      validate_class(Integer, @attempts)
-      validate_positive_integer(@attempts)
+      validate_class(Integer, attempts)
+      validate_positive_integer(attempts)
     end
 
     def validate_hints
-      validate_class(Integer, @hints)
-      validate_non_negative_integer(@hints)
+      validate_class(Integer, hints)
+      validate_non_negative_integer(hints)
     end
   end
 end
