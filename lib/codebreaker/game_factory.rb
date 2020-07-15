@@ -4,9 +4,9 @@ module Codebreaker
   class GameFactory
     include Validator
 
-    EASY = :easy_difficulty
-    MEDIUM = :medium_difficulty
-    HELL = :hell_difficulty
+    EASY = :easy
+    MEDIUM = :medium
+    HELL = :hell
 
     EASY_DIFFICULTY = Difficulty.new(name: 'Easy', attempts: 15, hints: 2).freeze
     MEDIUM_DIFFICULTY = Difficulty.new(name: 'Medium', attempts: 10, hints: 1).freeze
