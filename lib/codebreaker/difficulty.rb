@@ -17,6 +17,16 @@ module Codebreaker
       [attempts, hints] <=> [other.attempts, other.hints]
     end
 
+    def self.difficulty(keyword)
+      case keyword
+      when :easy then Difficulty.new(name: 'Easy', attempts: 15, hints: 2)
+      when :medium then Difficulty.new(name: 'Medium', attempts: 10, hints: 1)
+      when :hell then Difficulty.new(name: 'Hell', attempts: 5, hints: 1)
+      else
+        raise UnknownDifficultyError
+      end
+    end
+
     private
 
     def validate_data

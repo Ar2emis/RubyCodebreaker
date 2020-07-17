@@ -20,4 +20,22 @@ RSpec.describe Codebreaker::Difficulty do
       expect(difficulty <=> equal_difficulty).to eq 0
     end
   end
+
+  describe '.difficulty' do
+    it 'returns game with easy difficulty' do
+      expect(described_class.difficulty(:easy)).to be_a described_class
+    end
+
+    it 'returns game with medium difficulty' do
+      expect(described_class.difficulty(:medium)).to be_a described_class
+    end
+
+    it 'returns game with hell difficulty' do
+      expect(described_class.difficulty(:hell)).to be_a described_class
+    end
+
+    it 'raises error if unknown difficulty keyword passed' do
+      expect { described_class.difficulty(:invalid) }.to raise_error(Codebreaker::UnknownDifficultyError)
+    end
+  end
 end
