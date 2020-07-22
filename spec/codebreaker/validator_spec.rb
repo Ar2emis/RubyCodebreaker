@@ -5,95 +5,73 @@ RSpec.describe Codebreaker::Validator do
 
   let(:class_with_validation) { Class.new { include Codebreaker::Validator } }
 
-  describe '#validate_class' do
-    it 'can validate instance class' do
-      expect { validator.validate_class(String, 'abc') }.not_to raise_error
+  describe '#valid_class?' do
+    it 'returns true if class is valid' do
+      expect(validator).to be_valid_class(String, 'abc')
     end
 
-    it 'can fail validation' do
-      expect { validator.validate_class(String, 1) }.to raise_error(Codebreaker::UnexpectedClassError)
-    end
-  end
-
-  describe '#validate_class_or_nil' do
-    it 'can validate instance class' do
-      expect { validator.validate_class_or_nil(String, '123') }.not_to raise_error
-    end
-
-    it 'can validate NilClass' do
-      expect { validator.validate_class_or_nil(String, nil) }.not_to raise_error
-    end
-
-    it 'can fail validation' do
-      expect { validator.validate_class_or_nil(String, 1.64) }.to raise_error(Codebreaker::UnexpectedClassError)
+    it 'returns false if class is not valid' do
+      expect(validator).not_to be_valid_class(String, 1)
     end
   end
 
-  describe '#validate_non_empty_string' do
-    it 'can validate non empty string' do
-      expect { validator.validate_non_empty_string('abc') }.not_to raise_error
+  describe '#valid_non_empty_string?' do
+    it 'returns true if string is not empty' do
+      expect(validator).to be_valid_non_empty_string('abc')
     end
 
-    it 'can fail validation' do
-      expect { validator.validate_non_empty_string('') }.to raise_error(Codebreaker::EmptyStringError)
-    end
-  end
-
-  describe '#validate_positive_integer' do
-    it 'can validate positive integer' do
-      expect { validator.validate_positive_integer(1) }.not_to raise_error
-    end
-
-    it 'can fail validation' do
-      expect { validator.validate_positive_integer(0) }.to raise_error(Codebreaker::NonPositiveIntegerError)
+    it 'returns true if string is empty' do
+      expect(validator).not_to be_valid_non_empty_string('')
     end
   end
 
-  describe '#validate_non_negative_integer' do
-    it 'can validate non negative integer' do
-      expect { validator.validate_non_negative_integer(0) }.not_to raise_error
+  describe '#valid_positive_integer?' do
+    it 'returns true if integer is greater than 0' do
+      expect(validator).to be_valid_positive_integer(1)
     end
 
-    it 'can fail validation' do
-      expect { validator.validate_non_negative_integer(-1) }.to raise_error(Codebreaker::NegativeIntegerError)
-    end
-  end
-
-  describe '#validate_string_length' do
-    it 'can validate string minimal length' do
-      expect { validator.validate_string_length(string: 'aaa', min_length: 2) }.not_to raise_error
-    end
-
-    it 'can validate string minimal and maximal length' do
-      expect { validator.validate_string_length(string: 'aaa', min_length: 1, max_length: 3) }.not_to raise_error
-    end
-
-    it 'can fail minimal length validation' do
-      expect do
-        validator.validate_string_length(string: 'aaa', min_length: 5)
-      end.to raise_error(Codebreaker::InvalidStringLengthError)
-    end
-
-    it 'can fail minimal and maximal length validation by minimal length' do
-      expect do
-        validator.validate_string_length(string: 'aaa', min_length: 5, max_length: 10)
-      end.to raise_error(Codebreaker::InvalidStringLengthError)
-    end
-
-    it 'can fail minimal and maximal length validation by maximal length' do
-      expect do
-        validator.validate_string_length(string: 'aaaaaaaaaa', min_length: 2, max_length: 3)
-      end.to raise_error(Codebreaker::InvalidStringLengthError)
+    it 'returns false if integer is not greater than 0' do
+      expect(validator).not_to be_valid_positive_integer(0)
     end
   end
 
-  describe '#validate_only_numeric_string' do
-    it 'can validate only numeric string' do
-      expect { validator.validate_only_numeric_string('1234') }.not_to raise_error
+  describe '#valid_non_negative_integer?' do
+    it 'returns true if integer is greater than or equal 0' do
+      expect(validator).to be_valid_non_negative_integer(0)
     end
 
-    it 'can fail validation' do
-      expect { validator.validate_only_numeric_string('a2da.') }.to raise_error(Codebreaker::NonNumericStringError)
+    it 'returns false if integer is not greater than or equal 0' do
+      expect(validator).not_to be_valid_non_negative_integer(-1)
+    end
+  end
+
+  describe '#valid_string_min_length?' do
+    it 'returns true if string minimal length is greater than or equal passed number' do
+      expect(validator).to be_valid_string_min_length('aaa', 2)
+    end
+
+    it 'returns false if string minimal length is not greater than or equal passed number' do
+      expect(validator).not_to be_valid_string_min_length('aaa', 4)
+    end
+  end
+
+  describe '#valid_string_max_length?' do
+    it 'returns true if string maximal length is less than or equal passed number' do
+      expect(validator).to be_valid_string_max_length('aaa', 4)
+    end
+
+    it 'returns false if string maximal length is not less than or equal passed number' do
+      expect(validator).not_to be_valid_string_max_length('aaa', 2)
+    end
+  end
+
+  describe '#valid_only_numeric_string?' do
+    it 'returns true if string contains only digits' do
+      expect(validator).to be_valid_only_numeric_string('1234')
+    end
+
+    it 'returns false if string contains other characters' do
+      expect(validator).not_to be_valid_only_numeric_string('ad21a')
     end
   end
 end

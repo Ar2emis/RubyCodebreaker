@@ -12,7 +12,6 @@ module Codebreaker
 
     def save
       store = YAML::Store.new(storage_path)
-
       store.transaction { @data.each { |key, value| store[key] = value } }
     end
 
@@ -43,7 +42,6 @@ module Codebreaker
 
     def load
       store = YAML::Store.new(storage_path)
-
       store.transaction { store.roots.to_h { |key| [key, store[key]] } }
     end
   end

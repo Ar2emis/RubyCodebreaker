@@ -5,47 +5,67 @@ RSpec.describe Codebreaker::Game do
 
   let(:difficulty) { Codebreaker::Difficulty.new(name: 'Easy', attempts: 10, hints: 2) }
   let(:user) { Codebreaker::User.new(Faker::Name.first_name) }
-  let(:stage_variable) { :@stage }
-  let(:game_stage) { :game }
-  let(:end_stage) { :end }
 
-  before do
-    store = instance_double(Codebreaker::CodebreakerStore)
-    allow(store).to receive(:data).and_return({ user_statistics: [] })
-    allow(store).to receive(:save)
-    allow(Codebreaker::CodebreakerStore).to receive(:new).and_return(store)
+  describe '#valid?' do
+    subject(:invalid_game) { described_class.new('easy', Faker::Name.first_name) }
+
+    it 'returns true if instance is valid' do
+      expect(game).to be_valid
+    end
+
+    it 'returns false if instance is not valid' do
+      expect(invalid_game).not_to be_valid
+    end
   end
 
-  describe '#restart' do
-    it 'changes code' do
+  describe '#start' do
+    it 'generates code' do
       old_code = game.code
-      game.restart
+      game.start
       expect(game.code).not_to eq old_code
     end
 
-    it 'restore attempts' do
-      game.restart
+    it 'initializes attempts' do
+      game.start
       expect(game.attempts_amount).to eq difficulty.attempts
     end
 
-    it 'restore hints' do
-      game.restart
+    it 'initializes hints' do
+      game.start
       expect(game.hints_amount).to eq difficulty.hints
     end
   end
 
-  context 'with user statistics' do
-    describe '#save_statistic' do
-      let(:expected_error) { Codebreaker::InappropriateStageError }
+  context 'when game starts' do
+    before do
+      store = instance_double(Codebreaker::CodebreakerStore)
+      allow(store).to receive(:data).and_return({ user_statistics: [] })
+      allow(store).to receive(:save)
+      allow(Codebreaker::CodebreakerStore).to receive(:new).and_return(store)
+      game.start
+    end
 
-      it 'can save user statistic after game end' do
-        game.instance_variable_set(stage_variable, end_stage)
-        expect { game.save_statistic }.not_to raise_error
+    describe '#restart' do
+      it 'changes code' do
+        old_code = game.code
+        game.restart
+        expect(game.code).not_to eq old_code
       end
 
-      it 'can raise error if try to save statistic before or in game' do
-        game.instance_variable_set(stage_variable, game_stage)
-        expect { game.save_statistic }.to raise_error(expected_error)
+      it 'restore attempts' do
+        game.restart
+        expect(game.attempts_amount).to eq difficulty.attempts
+      end
+
+      it 'restore hints' do
+        game.restart
+        expect(game.hints_amount).to eq difficulty.hints
+      end
+    end
+
+    describe '#save_statistic' do
+      it 'can save user statistic' do
+        expect { game.save_statistic }.not_to raise_error
       end
     end
 
@@ -54,56 +74,66 @@ RSpec.describe Codebreaker::Game do
         expect(described_class.user_statistic).to be_an Array
       end
     end
-  end
 
-  describe '#take_hint' do
-    let(:hints_variable) { :@hints_amount }
-    let(:expected_no_hints_error) { Codebreaker::NoHintsLeftError }
-    let(:expected_stage_error) { Codebreaker::InappropriateStageError }
+    describe '#take_hint' do
+      let(:hints_variable) { :@hints_amount }
+      let(:expected_no_hints_error) { Codebreaker::NoHintsLeftError }
 
-    it 'can return one of the code numbers' do
-      expect(game.code).to include(game.take_hint)
-    end
-
-    it 'can raise error if no hints left' do
-      game.instance_variable_set(hints_variable, 0)
-      expect { game.take_hint }.to raise_error(expected_no_hints_error)
-    end
-
-    it 'can raise error if method is called when game ended' do
-      game.instance_variable_set(stage_variable, end_stage)
-      expect { game.take_hint }.to raise_error(expected_stage_error)
-    end
-  end
-
-  describe '#make_turn' do
-    let(:guess) { Codebreaker::Guess.new('1234') }
-    let(:expected_error) { Codebreaker::InappropriateStageError }
-
-    context 'when game goes' do
-      let(:play_status) { described_class::PLAY_STATUS }
-      let(:win_status) { described_class::WIN_STATUS }
-      let(:lose_status) { described_class::LOSE_STATUS }
-      let(:attempts_variable) { :@attempts_amount }
-
-      it 'returns playing status and action result when game continues' do
-        expect(game.make_turn(guess)[:status]).to eq play_status
+      it 'can return one of the code numbers' do
+        expect(game.code).to include(game.take_hint)
       end
 
-      it 'returns winning status and action result when player wins' do
-        win_guess = Codebreaker::Guess.new(game.code.map(&:to_s).join)
-        expect(game.make_turn(win_guess)[:status]).to eq win_status
-      end
-
-      it 'returns losing status and action result when player loses' do
-        game.instance_variable_set(attempts_variable, 1)
-        expect(game.make_turn(guess)[:status]).to eq lose_status
+      it 'can raise error if no hints left' do
+        game.instance_variable_set(hints_variable, 0)
+        expect { game.take_hint }.to raise_error(expected_no_hints_error)
       end
     end
 
-    it 'can raise error if method is called when game ended' do
-      game.instance_variable_set(stage_variable, end_stage)
-      expect { game.make_turn(guess) }.to raise_error(expected_error)
+    describe '#make_turn' do
+      let(:guess) do
+        guess = instance_double(Codebreaker::Guess)
+        allow(guess).to receive(:code).and_return([1, 2, 3, 4])
+        guess
+      end
+      let(:match_result) { '++++' }
+
+      before do
+        matcher = instance_double(Codebreaker::CodeMatcher)
+        allow(matcher).to receive(:match_codes).and_return(match_result)
+        allow(Codebreaker::CodeMatcher).to receive(:new).and_return(matcher)
+      end
+
+      it 'returns codes match' do
+        expect(game.make_turn(guess)).to be_a(String)
+      end
+    end
+
+    describe '#win?' do
+      let(:guess) do
+        guess = instance_double(Codebreaker::Guess)
+        allow(guess).to receive(:code).and_return(game.code)
+        guess
+      end
+
+      it "returns false if player has't won" do
+        expect(game).not_to be_win
+      end
+
+      it 'returns true if player has won' do
+        game.instance_variable_set(:@guess, guess)
+        expect(game).to be_win
+      end
+    end
+
+    describe '#lose?' do
+      it "returns false if player has't lost" do
+        expect(game).not_to be_lose
+      end
+
+      it 'returns true if player has lost' do
+        game.instance_variable_set(:@attempts_amount, 0)
+        expect(game).to be_lose
+      end
     end
   end
 end

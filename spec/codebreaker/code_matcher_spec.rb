@@ -1,6 +1,23 @@
 # frozen_string_literal: true
 
 RSpec.describe Codebreaker::CodeMatcher do
+  describe '#valid?' do
+    let(:valid_secret_code) { [1, 2, 3, 4] }
+    let(:valid_guess_code) { [1, 2, 3, 4] }
+    let(:invalid_secret_code) { 1 }
+    let(:invalid_guess_code) { -1 }
+
+    it 'returns true if instance is valid' do
+      valid_matcher = described_class.new(valid_secret_code, valid_guess_code)
+      expect(valid_matcher).to be_valid
+    end
+
+    it 'returns false if instance is not valid' do
+      invalid_matcher = described_class.new(invalid_secret_code, invalid_guess_code)
+      expect(invalid_matcher).not_to be_valid
+    end
+  end
+
   describe '#match_codes' do
     test_examples = [{ code: [6, 5, 4, 3], guess: [5, 6, 4, 3], answer: '++--' },
                      { code: [6, 5, 4, 3], guess: [6, 4, 1, 1], answer: '+-' },

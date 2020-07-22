@@ -2,36 +2,32 @@
 
 module Codebreaker
   module Validator
-    def validate_class(expected_class, instance)
-      raise UnexpectedClassError unless instance.is_a?(expected_class)
+    def valid_class?(expected_class, instance)
+      instance.is_a?(expected_class)
     end
 
-    def validate_class_or_nil(expected_class, instance)
-      raise UnexpectedClassError unless [expected_class, NilClass].include?(instance.class)
+    def valid_non_empty_string?(string)
+      !string.empty?
     end
 
-    def validate_non_empty_string(string)
-      raise EmptyStringError if string.empty?
+    def valid_positive_integer?(number)
+      number.positive?
     end
 
-    def validate_positive_integer(number)
-      raise NonPositiveIntegerError unless number.positive?
+    def valid_non_negative_integer?(number)
+      !number.negative?
     end
 
-    def validate_non_negative_integer(number)
-      raise NegativeIntegerError if number.negative?
+    def valid_string_min_length?(string, min_length)
+      string.length >= min_length
     end
 
-    def validate_string_length(string:, min_length:, max_length: nil)
-      if max_length.nil?
-        raise InvalidStringLengthError if string.length < min_length
-      elsif string.length < min_length || string.length > max_length
-        raise InvalidStringLengthError
-      end
+    def valid_string_max_length?(string, max_length)
+      string.length <= max_length
     end
 
-    def validate_only_numeric_string(string)
-      raise NonNumericStringError unless /\A\d+\Z/.match?(string)
+    def valid_only_numeric_string?(string)
+      /\A\d+\Z/.match?(string)
     end
   end
 end

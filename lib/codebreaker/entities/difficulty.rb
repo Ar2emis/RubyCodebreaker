@@ -1,23 +1,21 @@
 # frozen_string_literal: true
 
 module Codebreaker
-  class Difficulty
-    include Validator
+  class Difficulty < ValidatableEntity
     attr_reader :name, :attempts, :hints
 
     def initialize(name:, attempts:, hints:)
+      super()
       @name = name
       @attempts = attempts
       @hints = hints
-
-      validate_data
     end
 
     def <=>(other)
       [attempts, hints] <=> [other.attempts, other.hints]
     end
 
-    def self.difficulty(keyword)
+    def self.difficulties(keyword)
       case keyword
       when :easy then Difficulty.new(name: 'Easy', attempts: 15, hints: 2)
       when :medium then Difficulty.new(name: 'Medium', attempts: 10, hints: 1)
@@ -29,25 +27,26 @@ module Codebreaker
 
     private
 
-    def validate_data
+    def validate
       validate_name
       validate_attempts
       validate_hints
     end
 
     def validate_name
-      validate_class(String, name)
-      validate_non_empty_string(name)
+      add_error(:name, UnexpectedClassError) unless valid_class?(String, name)
+      add_error(:name, EmptyStringError) if valid_class?(String, name) && !valid_non_empty_string?(name)
     end
 
     def validate_attempts
-      validate_class(Integer, attempts)
-      validate_positive_integer(attempts)
+      add_error(:attempts, UnexpectedClassError) unless valid_class?(Integer, attempts)
+      add_error(:attempts, NonPositiveIntegerError) if valid_class?(Integer, attempts) &&
+                                                       !valid_positive_integer?(attempts)
     end
 
     def validate_hints
-      validate_class(Integer, hints)
-      validate_non_negative_integer(hints)
+      add_error(:hints, UnexpectedClassError) unless valid_class?(Integer, hints)
+      add_error(:hints, NegativeIntegerError) if valid_class?(Integer, hints) && !valid_non_negative_integer?(hints)
     end
   end
 end

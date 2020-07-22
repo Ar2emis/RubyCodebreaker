@@ -1,9 +1,29 @@
 # frozen_string_literal: true
 
 RSpec.describe Codebreaker::User do
-  let(:name) { Faker::Name.first_name }
+  describe '#valid?' do
+    let(:non_string) { 1 }
+    let(:too_short_name) { 'a' * (described_class::USERNAME_MIN_LENGTH - 1) }
+    let(:too_long_name) { 'a' * (described_class::USERNAME_MAX_LENGTH + 1) }
 
-  it 'can be created by passing name to it' do
-    expect { described_class.new(name) }.not_to raise_error
+    it 'returns true if instance is valid' do
+      user = described_class.new(Faker::Name.first_name)
+      expect(user).to be_valid
+    end
+
+    it 'returns false if passed not a string' do
+      invalid_user = described_class.new(non_string)
+      expect(invalid_user).not_to be_valid
+    end
+
+    it 'returns false if passed name is too short' do
+      invalid_user = described_class.new(too_short_name)
+      expect(invalid_user).not_to be_valid
+    end
+
+    it 'returns false if namee is too long' do
+      invalid_user = described_class.new(too_long_name)
+      expect(invalid_user).not_to be_valid
+    end
   end
 end

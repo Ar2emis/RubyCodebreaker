@@ -1,19 +1,16 @@
 # frozen_string_literal: true
 
 module Codebreaker
-  class CodeMatcher
-    include Validator
-
+  class CodeMatcher < ValidatableEntity
     attr_reader :answer
 
     STRONG_MATCH_SYMBOL = '+'
     SOFT_MATCH_SYMBOL = '-'
 
     def initialize(secret_code, guess_code)
+      super()
       @secret_code = secret_code
       @guess_code = guess_code
-
-      validate_data
     end
 
     def match_codes
@@ -24,7 +21,7 @@ module Codebreaker
     end
 
     def codes_match?
-      match_codes == STRONG_MATCH_SYMBOL * @secret_code.count
+      @secret_code == @guess_code
     end
 
     private
@@ -57,8 +54,9 @@ module Codebreaker
       guess_answer
     end
 
-    def validate_data
-      [@secret_code, @guess_code].each { |code| validate_class(Array, code) }
+    def validate
+      add_error(:secret_code, UnexpectedClassError) unless valid_class?(Array, @secret_code)
+      add_error(:guess_code, UnexpectedClassError) unless valid_class?(Array, @guess_code)
     end
   end
 end
