@@ -29,5 +29,10 @@ module Codebreaker
     def valid_only_numeric_string?(string)
       /\A\d+\Z/.match?(string)
     end
+
+    def valid_range?(range, code)
+      code.each { |digit| return false unless range.cover?(digit) }
+      true
+    end
   end
 end

@@ -20,8 +20,6 @@ module Codebreaker
       when :easy then Difficulty.new(name: 'Easy', attempts: 15, hints: 2)
       when :medium then Difficulty.new(name: 'Medium', attempts: 10, hints: 1)
       when :hell then Difficulty.new(name: 'Hell', attempts: 5, hints: 1)
-      else
-        raise UnknownDifficultyError
       end
     end
 
@@ -34,19 +32,21 @@ module Codebreaker
     end
 
     def validate_name
-      add_error(:name, UnexpectedClassError) unless valid_class?(String, name)
-      add_error(:name, EmptyStringError) if valid_class?(String, name) && !valid_non_empty_string?(name)
+      return add_error(:name, I18n.t(:unexpected_class_error)) unless valid_class?(String, name)
+
+      add_error(:name, I18n.t(:empty_string_error)) unless valid_non_empty_string?(name)
     end
 
     def validate_attempts
-      add_error(:attempts, UnexpectedClassError) unless valid_class?(Integer, attempts)
-      add_error(:attempts, NonPositiveIntegerError) if valid_class?(Integer, attempts) &&
-                                                       !valid_positive_integer?(attempts)
+      return add_error(:attempts, I18n.t(:unexpected_class_error)) unless valid_class?(Integer, attempts)
+
+      add_error(:attempts, I18n.t(:non_positive_integer_error)) unless valid_positive_integer?(attempts)
     end
 
     def validate_hints
-      add_error(:hints, UnexpectedClassError) unless valid_class?(Integer, hints)
-      add_error(:hints, NegativeIntegerError) if valid_class?(Integer, hints) && !valid_non_negative_integer?(hints)
+      return add_error(:hints, I18n.t(:unexpected_class_error)) unless valid_class?(Integer, hints)
+
+      add_error(:hints, I18n.t(:negative_integer_error)) unless valid_non_negative_integer?(hints)
     end
   end
 end

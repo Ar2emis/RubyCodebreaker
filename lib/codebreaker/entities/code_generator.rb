@@ -18,10 +18,10 @@ module Codebreaker
     private
 
     def validate
-      add_error(:range, UnexpectedClassError) unless valid_class?(Range, @range)
-      return add_error(:amount, UnexpectedClassError) unless valid_class?(Integer, @amount)
+      add_error(:range, I18n.t(:unexpected_class_error)) unless valid_class?(Range, @range)
+      return add_error(:amount, I18n.t(:unexpected_class_error)) unless valid_class?(Integer, @amount)
 
-      add_error(:amount, NonPositiveIntegerError) unless valid_positive_integer?(@amount)
+      add_error(:amount, I18n.t(:non_positive_integer_error)) unless valid_positive_integer?(@amount)
     end
   end
 end

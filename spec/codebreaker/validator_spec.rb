@@ -74,4 +74,14 @@ RSpec.describe Codebreaker::Validator do
       expect(validator).not_to be_valid_only_numeric_string('ad21a')
     end
   end
+
+  describe '#valid_range?' do
+    it 'returns true if all array elements are covered by range' do
+      expect(validator).to be_valid_range((1..6), [1, 2, 3, 4, 5, 6])
+    end
+
+    it 'returns false if any of array elements is not covered by range' do
+      expect(validator).not_to be_valid_range((1..6), [0, 1, 2, 3, 4, 5, 6, 7])
+    end
+  end
 end

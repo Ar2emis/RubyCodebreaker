@@ -55,8 +55,8 @@ module Codebreaker
     end
 
     def validate
-      add_error(:secret_code, UnexpectedClassError) unless valid_class?(Array, @secret_code)
-      add_error(:guess_code, UnexpectedClassError) unless valid_class?(Array, @guess_code)
+      add_error(:secret_code, I18n.t(:unexpected_class_error)) unless valid_class?(Array, @secret_code)
+      add_error(:guess_code, I18n.t(:unexpected_class_error)) unless valid_class?(Array, @guess_code)
     end
   end
 end

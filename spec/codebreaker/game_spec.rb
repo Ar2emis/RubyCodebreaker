@@ -82,11 +82,6 @@ RSpec.describe Codebreaker::Game do
       it 'can return one of the code numbers' do
         expect(game.code).to include(game.take_hint)
       end
-
-      it 'can raise error if no hints left' do
-        game.instance_variable_set(hints_variable, 0)
-        expect { game.take_hint }.to raise_error(expected_no_hints_error)
-      end
     end
 
     describe '#make_turn' do

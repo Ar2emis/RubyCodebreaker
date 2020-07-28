@@ -53,8 +53,8 @@ RSpec.describe Codebreaker::Difficulty do
       expect(described_class.difficulties(:hell)).to be_a described_class
     end
 
-    it 'raises error if unknown difficulty keyword passed' do
-      expect { described_class.difficulties(:invalid) }.to raise_error(Codebreaker::UnknownDifficultyError)
+    it 'returns nil if unknown difficulty keyword passed' do
+      expect(described_class.difficulties(:invalid)).to be_nil
     end
   end
 end

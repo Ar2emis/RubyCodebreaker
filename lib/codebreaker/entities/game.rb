@@ -26,8 +26,6 @@ module Codebreaker
     end
 
     def take_hint
-      raise NoHintsLeftError unless hints_amount.positive?
-
       @hints_amount -= 1
       @hints.pop
     end
@@ -61,8 +59,8 @@ module Codebreaker
     end
 
     def validate
-      add_error(:user, UnexpectedClassError) unless valid_class?(User, user)
-      add_error(:difficulty, UnexpectedClassError) unless valid_class?(Difficulty, difficulty)
+      add_error(:user, I18n.t(:unexpected_class_error)) unless valid_class?(User, user)
+      add_error(:difficulty, I18n.t(:unexpected_class_error)) unless valid_class?(Difficulty, difficulty)
     end
 
     def prepare_game
