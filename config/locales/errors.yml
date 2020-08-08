@@ -1,0 +1,8 @@
+en:
+  empty_string_error: "can't be blank"
+  negative_integer_error: "can't be negative number"
+  no_numeric_string_error: "can contain only digits"
+  non_positive_integer_error: "can't be less than 1"
+  string_max_length_error: 'is too long'
+  string_min_length_error: 'is too short'
+  unexpected_class_error: 'contains unexpeted type'

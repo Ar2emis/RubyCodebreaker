@@ -1,2 +1,0 @@
-# RubyCodebreaker
-Codebreaker game
