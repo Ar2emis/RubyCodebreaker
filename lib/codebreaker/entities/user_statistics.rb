@@ -3,7 +3,7 @@
 module Codebreaker
   class UserStatistics < ValidatableEntity
     include Validator
-    attr_reader :user, :difficulty, :attempts, :hints
+    attr_reader :user, :difficulty, :attempts, :hints, :date
 
     def initialize(user:, difficulty:, attempts:, hints:)
       super()
@@ -11,6 +11,7 @@ module Codebreaker
       @difficulty = difficulty
       @attempts = attempts
       @hints = hints
+      @date = DateTime.now
     end
 
     private

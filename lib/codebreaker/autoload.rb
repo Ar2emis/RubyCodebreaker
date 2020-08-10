@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'yaml/store'
+require 'date'
 
 require 'i18n'
 require_relative 'config/i18n_config'
